@@ -1,5 +1,5 @@
 #undef UNICODE
-//Code de Jean-Félix Girard - Laboratoire 3 (Protocole)
+//Code de Jean-FÃ©lix - Laboratoire 3
 #define WIN32_LEAN_AND_MEAN
 
 //socket libraries
@@ -68,9 +68,9 @@ int __cdecl main(int argc, char* argv[])
     cout << "Laboratoire 3 sur les protocoles -> Serveur" << endl;
 
     ExecPath = argv[0];                         //get the exe path
-    replace(ExecPath, "Serveur.exe", "Data\\"); //je modifie le path courant qui mène à l'exécutable et le modifie pour avoir le path qui mène au dossier Data
+    replace(ExecPath, "Serveur.exe", "Data\\"); //je modifie le path courant qui mÃ¨ne Ã  l'exÃ©cutable et le modifie pour avoir le path qui mÃ¨ne au dossier Data
 
-    //Je récupère le path vers le fichier qui contient les crédentials et je récupère nom d'utilisateurs et les mots de passes qu'il contient
+    //Je rÃ©cupÃ¨re le path vers le fichier qui contient les crÃ©dentials et je rÃ©cupÃ¨re nom d'utilisateurs et les mots de passes qu'il contient
     string AdminPath = ExecPath;
     replace(AdminPath, "Data\\", "Accounts.txt");
     GetCredentials(AdminPath);
@@ -101,7 +101,7 @@ int __cdecl main(int argc, char* argv[])
     //Dire au winsock d'ecouter
     listen(listening, SOMAXCONN);
 
-    //Je crée un master file descriptor et je le set a zero
+    //Je crÃ©e un master file descriptor et je le set a zero
     fd_set master;
     FD_ZERO(&master);
 
@@ -130,7 +130,7 @@ int __cdecl main(int argc, char* argv[])
                 //accepte la nouvelle connection
                 SOCKET clientSocket = accept(listening, (sockaddr*)&clientSockAddress, &clientSize);
                 
-                //j'ajoute la nouvelle connection a la liste des clients connectés
+                //j'ajoute la nouvelle connection a la liste des clients connectÃ©s
                 FD_SET(clientSocket, &master);
 
                 char host[NI_MAXHOST];      //nom du client
@@ -159,43 +159,43 @@ int __cdecl main(int argc, char* argv[])
 
                 ShowDataFolder(clientSocket); //montre le contenu du fichier data sur le serveur
             }
-            else //Si c'est un message d'un client qui est actuellement connecté
+            else //Si c'est un message d'un client qui est actuellement connectÃ©
             {
                 ZeroMemory(buff, 4096);
 
-                //attendre de recevoir les données du client
+                //attendre de recevoir les donnÃ©es du client
                 int byteReceived = recv(sock, buff, 4096, 0);
                 if (byteReceived == SOCKET_ERROR) {
                     //cerr << "Error in recv(). Exiting" << endl;
                     break;
                 }
               
-                if (byteReceived <= 0) //si la réponse est nulle j'enlève le client de la liste
+                if (byteReceived <= 0) //si la rÃ©ponse est nulle j'enlÃ¨ve le client de la liste
                 {
-                    //enlève le client
+                    //enlÃ¨ve le client
                     closesocket(sock);
                     FD_CLR(sock, &master);
                 }
                 else 
                 {
-                    //Si la commande reçu est la commande list, le serveur affiche le contenu du data folder
+                    //Si la commande reÃ§u est la commande list, le serveur affiche le contenu du data folder
                     if (string(buff, 0, byteReceived) == "list") {
                         ShowDataFolder(sock);
                     }
-                    else if (string(buff, 0, byteReceived) == "q") { //si la commande est q, déconnecte le client du serveur
+                    else if (string(buff, 0, byteReceived) == "q") { //si la commande est q, dÃ©connecte le client du serveur
                         closesocket(sock);
                         FD_CLR(sock, &master);
 
                         cout << "Client de la socket: " << sock << " s'est deconnecter." << endl;
                     }
                     else {
-                        //Si cela ne correspond pas au deux commandes précédantes, le serveur vérifie si la commande est valide
+                        //Si cela ne correspond pas au deux commandes prÃ©cÃ©dantes, le serveur vÃ©rifie si la commande est valide
                      
-                        bool bisNumber = isNumber(string(buff, 0, byteReceived));//vérifie si la commande est un nombre
+                        bool bisNumber = isNumber(string(buff, 0, byteReceived));//vÃ©rifie si la commande est un nombre
                         if (bisNumber == true) {
                             int command = stoi(string(buff, 0, byteReceived));
 
-                            if (command <= NumberOfFiles && command > -1) {   //condition si le choix est un nombre valide (le nombre doit correspondre a un fichier dans la liste présente à l'écran. Il doit être plus petit ou égal au nombre de fichier présent et ne pas être négatif) 
+                            if (command <= NumberOfFiles && command > -1) {   //condition si le choix est un nombre valide (le nombre doit correspondre a un fichier dans la liste prÃ©sente Ã  l'Ã©cran. Il doit Ãªtre plus petit ou Ã©gal au nombre de fichier prÃ©sent et ne pas Ãªtre nÃ©gatif) 
                                 FileToSendToClient = stoi(string(buff, 0, byteReceived));
 
                                 string validCommand = "La commande est valide";
@@ -204,22 +204,22 @@ int __cdecl main(int argc, char* argv[])
                                 // envoie un message de reponse au client, pour lui dire que sa commande est valide
                                 send(sock, validCommand.c_str(), validCommand.size() + 1, 0);
 
-                                //Envoie les informations nécessaire au client du fichier choisi pour que le client puisse le télécharger
+                                //Envoie les informations nÃ©cessaire au client du fichier choisi pour que le client puisse le tÃ©lÃ©charger
                                 SendFile(string(buff, 0, byteReceived), sock);
 
-                                //affiche a l'écran du serveur
+                                //affiche a l'Ã©cran du serveur
                                 //cout << string(buff, 0, byteReceived) << endl;
                             }
-                            else {//commande est invalide, car le nombre reçu est trop petit ou trop grand et ne fait donc pas de sens
-                                //affiche a l'écran du serveur si la commande est invalide
+                            else {//commande est invalide, car le nombre reÃ§u est trop petit ou trop grand et ne fait donc pas de sens
+                                //affiche a l'Ã©cran du serveur si la commande est invalide
                                 string invalidCommand = "La commande: " + string(buff, 0, byteReceived) + " est invalide";
                                 cout << invalidCommand << endl;
                                 // envoie un message de reponse au client, pour lui dire que sa commande est invalide
                                 send(sock, invalidCommand.c_str(), invalidCommand.size() + 1, 0);
                             }
                         }
-                        else {//la commande est invalide car la commande reçu n'est pas un nombre
-                            //affiche a l'écran du serveur si la commande est invalide
+                        else {//la commande est invalide car la commande reÃ§u n'est pas un nombre
+                            //affiche a l'Ã©cran du serveur si la commande est invalide
                             string invalidCommand = "La commande: " + string(buff, 0, byteReceived) + " est invalide";
                             cout << invalidCommand << endl;
                             // envoie un message de reponse au client, pour lui dire que sa commande est invalide
@@ -251,7 +251,7 @@ void GetCredentials(string AdminPath)
     {
         while (getline(myfile, line))
         {
-            Credentials.push_back(line);    //mets chaque ligne du fichier Accounts.txt dans mon vecteur qui contient les crédentials
+            Credentials.push_back(line);    //mets chaque ligne du fichier Accounts.txt dans mon vecteur qui contient les crÃ©dentials
         }
         myfile.close();
     }
