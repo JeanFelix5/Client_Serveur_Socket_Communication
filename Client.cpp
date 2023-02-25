@@ -1,4 +1,4 @@
-//Code de Jean-Félix Girard - Laboratoire 3 (Protocole)
+//Code de Jean-FÃ©lix - Laboratoire 3
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -55,7 +55,7 @@ int __cdecl main(int argc, char** argv) {
     cout << "Laboratoire 3 sur les protocoles -> Client" << endl;
     
     string ExecPath = argv[0];
-    replace(ExecPath, "Client.exe", "Out\\"); //modification du lien vers l'exécutable pour avoir le lien vers le fichier Out du client
+    replace(ExecPath, "Client.exe", "Out\\"); //modification du lien vers l'exÃ©cutable pour avoir le lien vers le fichier Out du client
     OutFilePath = ExecPath;
 
     string ServerIPAddress = "127.0.0.1"; //Addresse IP du serveur
@@ -98,7 +98,7 @@ int __cdecl main(int argc, char** argv) {
 
     cout << endl;
     
-    ReceiveDataFolderNames(Clientsocket); //Réception du contenu du data folder
+    ReceiveDataFolderNames(Clientsocket); //RÃ©ception du contenu du data folder
 
     //boucle l'envoie et la reception des donnees
     char buff[4096];
@@ -220,11 +220,11 @@ void ReceiveFile(string fileName, SOCKET clientSocket) //OutFilePath = path du f
 
     int byteReceived = recv(clientSocket, (char*)&fileRequestedsize, sizeof(long), 0);
 
-    //creer un fichier selon le nom et le type récupéré avec le path du fichier Out 
+    //creer un fichier selon le nom et le type rÃ©cupÃ©rÃ© avec le path du fichier Out 
     fileSelected.open(OutFilePath + "/" + fileName, ios::binary | ios::trunc);
     int fileDownloaded = 0;
 
-    //écrit le fichier
+    //Ã©crit le fichier
     do {
         memset(buff, 0, 4096);
         int bytesReceived = recv(clientSocket, buff, 4096, 0);
